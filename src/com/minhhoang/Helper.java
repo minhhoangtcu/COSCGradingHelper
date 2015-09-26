@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Helper {
 	
 	private final String FILEPATH = "input";
+	private final String SAVEPATH = "output";
 	
 	public static void main(String[] args) {
 		Helper helper = new Helper();
@@ -16,11 +17,10 @@ public class Helper {
 			BufferedReader reader = getReader();
 			String[] emails = getEmail(reader);
 			String[] links = convertToHtml(emails);
-			for (String link: links) {
-				System.out.println(link);
-			}
+			saveFile(links);
+			System.out.println("finished");
 		} catch (FileNotFoundException e) {
-			System.err.println("No such file");
+			System.err.println("No such file to read");
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.err.println("Cannot read file");
@@ -34,6 +34,12 @@ public class Helper {
 		return reader;
 	}
 	
+	public BufferedWriter getWriter() throws IOException {
+		FileWriter output = new FileWriter(SAVEPATH);
+		BufferedWriter writer = new BufferedWriter(output);
+		return writer;
+	}
+	
 	public String[] getEmail(BufferedReader reader) throws IOException {
 		ArrayList<String> emails = new ArrayList<String>();
 		String line;
@@ -42,6 +48,7 @@ public class Helper {
 		}
 		String[] output = new String[emails.size()];
 		output = emails.toArray(output);
+		reader.close();
 		return output;
 	}
 	
@@ -59,5 +66,18 @@ public class Helper {
 			output[i] = firstPart + name + secondPart;
 		}
 		return output;
+	}
+	
+	public void saveFile(String[] links) {
+		try {
+			BufferedWriter writer = getWriter();
+			for (String link: links) {
+				writer.write(link + "\n");
+			}
+			writer.close();
+		} catch (IOException e) {
+			System.out.println("No such file to write");
+			e.printStackTrace();
+		}
 	}
 }
