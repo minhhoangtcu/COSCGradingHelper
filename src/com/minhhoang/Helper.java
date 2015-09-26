@@ -5,12 +5,29 @@ import java.util.ArrayList;
 
 public class Helper {
 	
-	private final String FILEPATH = "";
+	private final String FILEPATH = "input";
 	
 	public static void main(String[] args) {
-		
+		Helper helper = new Helper();
 	}
 
+	public Helper() {
+		try {
+			BufferedReader reader = getReader();
+			String[] emails = getEmail(reader);
+			String[] links = convertToHtml(emails);
+			for (String link: links) {
+				System.out.println(link);
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("No such file");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Cannot read file");
+			e.printStackTrace();
+		}
+	}
+	
 	public BufferedReader getReader() throws FileNotFoundException {
 		FileReader input = new FileReader(FILEPATH); 
 		BufferedReader reader = new BufferedReader(input);
@@ -28,8 +45,19 @@ public class Helper {
 		return output;
 	}
 	
-	public String[] convertToHtml(String[] input) {
+	public String[] convertToHtml(String[] allEmails) {
 		String firstPart = "http://www.student.tcu.edu/";
 		String secondPart = "/10403labs.html";
+		int numberOfEmails = allEmails.length;
+		
+		String[] output = new String[numberOfEmails];
+		
+		// Take the name field out of the emails. Strip all dot and put them into an array.
+		for (int i = 0; i < numberOfEmails; i++) {
+			String name = allEmails[i].split("@")[0];
+			name = name.replaceAll("\\.", "");
+			output[i] = firstPart + name + secondPart;
+		}
+		return output;
 	}
 }
