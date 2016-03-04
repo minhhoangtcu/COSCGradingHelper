@@ -1,4 +1,4 @@
-package com.minhhoang;
+package com.minhhoang.model;
 
 import java.io.*;
 import java.util.ArrayList;
