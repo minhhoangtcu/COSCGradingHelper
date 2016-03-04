@@ -1,6 +1,7 @@
 package com.minhhoang.view;
 
 import com.minhhoang.Main;
+import com.minhhoang.model.Helper;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,7 +34,12 @@ public class ConvertOverviewController {
 	
 	@FXML
 	private void convert() {
-		
+		String[] allEmails = Helper.getEmail(txtaDisplay.getText());
+		String[] allLinks = Helper.convertToHtml(allEmails);
+		txtaDisplay.setText("");
+		for (String link : allLinks) {
+			txtaDisplay.appendText(link + '\n');
+		}
 	}
 	
 	@FXML
